@@ -1,6 +1,5 @@
 #################
-# Name: N. Andreano
-# Date: 05/13/2025
+# CodeRacket
 # File: models.py
 # Summary: models.py    Defines the User class with logic for checking the hashed password securely.
 ################
