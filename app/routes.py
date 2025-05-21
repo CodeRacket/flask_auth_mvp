@@ -1,10 +1,9 @@
 #######
-#Date: 2025/05/14
 # Filename: routes.py
-# Summary: routes.py    Gets form data, looks up the user, and calls user.check_password(...)
+# Summary: Retrieves form data, queries the user, and Executes/calls the user.check_password(...) function. 
 #######
 
-# Flask and DB imports for easy template rendering & handling visitors and members. 
+# Flask and DB imports for easy template rendering & handling visitors and registered members. 
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, current_user, logout_user, login_required
 from app.models import db, User
