@@ -1,6 +1,6 @@
-##########
-# Memo: Script thay handles Flask setup with SQLAlchemy, Flask_login, and also defines how a user is loaded for a session  
-###########
+#Python __init__ script used by run.py
+# Handles  App Creation, Importing User Database Schema, Secure handling of Session Key
+# 
 from flask import Flask
 from flask_login import LoginManager
 from .models import db, User
