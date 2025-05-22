@@ -102,10 +102,6 @@ To deploy this project, configure environment variables and use a platform like:
 
 ## License
 
-# Project Name
-
-## License
-
 This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
 
 ---
