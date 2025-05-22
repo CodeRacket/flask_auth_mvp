@@ -28,11 +28,23 @@ def register():
 
     form = RegistrationForm()
     if form.validate_on_submit():
+
         existing_user = User.query.filter_by(email=form.email.data).first()
         # Check if registration email already exists in DB
         if existing_user:
             flash("Email is already Registered, try loggin in or using a different email", 'danger')
             return render_template('register.html', form=form)
+        existing_email = User.query.filter_by(email=form.email.data).first()
+        existing_username = User.query.filter_by(username=form.username.data).first()
+
+        # Check if registration email already exists in DB
+        if existing_email:
+            flash("Email is already Registered, Please Log in or use a different email", 'danger')
+            return render_template('register.html', form=form)
+        if existing_username:
+            flash("Username is already taken. Please Choose a Different one.", 'danger')
+            return render_template('register.html', form=form)
+
         # Create new user
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
