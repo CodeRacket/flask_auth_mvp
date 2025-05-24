@@ -26,7 +26,8 @@ A secure and lightweight authentication system built with Python and Flask. Feat
 ## Project Structure
 ```
 
-Flask\_Auth\_MVP/
+
+flask\_auth\_mvp/
 ├── app/
 │   ├── **init**.py          # App factory + extension initialization
 │   ├── models.py            # SQLAlchemy User model with password methods
@@ -48,8 +49,9 @@ Flask\_Auth\_MVP/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/CodeRacket/Flask_Auth_MVP.git
-cd Flask_Auth_MVP
+
+git clone https://github.com/CodeRacket/flask_auth_mvp
+cd flask_auth_mvp
 ```
 
 ### 2. Set Up a Virtual Environment
@@ -76,7 +78,7 @@ SECRET_KEY=your-secret-key
 
 ### 5. Initialize the database(First Run):
 
-```bash
+```bash #filename: init_db.py
 python
 >>> from app import create_app
 >>> from app.models import db
@@ -122,5 +124,4 @@ This project comes with **NO WARRANTY**. See the LICENSE for full terms.
 
 * Created by:  Nathaniel Andreano
 * For contact or freelance inquiries: Contact@CodeRacket.com 
-portfolio: https://coderacket.com/
-
+* Portfolio: https://coderacket.com/
