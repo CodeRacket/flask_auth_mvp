@@ -3,7 +3,7 @@
 # Summary: Retrieves form data, queries the user, and Executes/calls the user.check_password(...) function. 
 #######
 
-# Flask and DB imports for easy template rendering & handling visitors and registered members. 
+# Flask and DB imports—for easy template handling for visitors and registered members. 
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, current_user, logout_user, login_required
 from app.models import db, User
@@ -28,10 +28,16 @@ def register():
 
     form = RegistrationForm()
     if form.validate_on_submit():
+
         existing_email = User.query.filter_by(email=form.email.data).first()
         existing_username = User.query.filter_by(username=form.username.data).first()
 
         # Check if registration email and username already exists in DB
+        
+        existing_email = User.query.filter_by(email=form.email.data).first()
+        existing_username = User.query.filter_by(username=form.username.data).first()
+
+        # Check if registration email or username already exists in DB
         if existing_email:
             flash("Email is already Registered, Please Log in or use a different email", 'danger')
             return render_template('register.html', form=form)

@@ -27,6 +27,10 @@ coverage.xml
 *.cover
 *.log
 
+# Poetry / Python deps manager
+.cache/
+.poetry/
+
 # VS Code / IDE files
 .vscode/
 .idea/
@@ -36,3 +40,8 @@ coverage.xml
 .DS_Store
 Thumbs.db
 
+# Backups 
+*.backup
+*.bak
+*.old
+*.original
