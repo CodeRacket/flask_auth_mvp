@@ -29,3 +29,5 @@ jobs:
           poetry run pylint flask_auth_mvp/
           poetry run mypy .
 
+        - name: Check import order using isort
+          run poetry run isort --check-only .
