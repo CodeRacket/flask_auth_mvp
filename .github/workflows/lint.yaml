@@ -33,4 +33,4 @@ jobs:
           poetry run mypy .
 
       - name: Check import order using isort
-        run poetry run isort --check-only .
+        run: poetry run isort --check-only .
