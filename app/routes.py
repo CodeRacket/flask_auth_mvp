@@ -31,21 +31,13 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
 
-        existing_email = User.query.filter_by(
-                email=form.email.data
-                ).first()
-        existing_username = User.query.filter_by(
-                username=form.username.data
-                ).first()
+        existing_email = User.query.filter_by(email=form.email.data).first()
+        existing_username = User.query.filter_by(username=form.username.data).first()
 
         # Check if registration email and username already exists in DB
 
-        existing_email = User.query.filter_by(
-                email=form.email.data
-                ).first()
-        existing_username = User.query.filter_by(
-                username=form.username.data
-                ).first()
+        existing_email = User.query.filter_by(email=form.email.data).first()
+        existing_username = User.query.filter_by(username=form.username.data).first()
 
         # Check if registration email or username already exists in DB
         if existing_email:
@@ -55,9 +47,7 @@ def register():
             )
             return render_template("register.html", form=form)
         if existing_username:
-            flash(
-                    "Username is already taken. Please Choose a Different one.", "danger"
-                    )
+            flash("Username is already taken. Please Choose a Different one.", "danger")
             return render_template("register.html", form=form)
 
         # Create new user
