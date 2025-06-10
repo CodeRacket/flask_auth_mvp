@@ -1,4 +1,3 @@
-# This script is meant to act as a Entrypoint for the launch of the Application, Allowing for a "Cleaner Run".
 # run.py
 
 from app import create_app
