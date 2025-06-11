@@ -7,11 +7,13 @@
 # Flask and DB imports—for easy template
 # handling for visitors and registered members.
 from flask import Blueprint, render_template, redirect, url_for, flash
-#from flask import request
+
+# from flask import request
 from flask_login import login_user, current_user, logout_user, login_required
 from app.models import db, User
 from app.forms import RegistrationForm, LoginForm
-#from flask import current_app as app
+
+# from flask import current_app as app
 
 # Create the Blueprint
 main = Blueprint("main", __name__)
