@@ -1,0 +1,18 @@
+# Flask secret key (Used for session / CSRF—Should be randomly generated.)
+SECRET_KEY=<your-secret-key>
+
+# pgAdmin configuration (for local dev only—never expose to the internet.)
+PGADMIN_DEFAULT_EMAIL=admin@pgadmin.com
+PGADMIN_DEFAULT_PASSWORD=mypgadminpass
+
+# PostgreSQL configuration
+POSTGRES_DB=db
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+
+# SQLAlchemy database URI(used by Flask SQLAlchemy / Alembic )
+DATABASE_URL=postgresql+psycopg2://postgres:postgres@db:5432/db
+
+# Flask debug mode (should  be removed in production)
+DEBUG=True
+
