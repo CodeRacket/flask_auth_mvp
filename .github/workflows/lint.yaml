@@ -26,8 +26,8 @@ jobs:
         run: poetry install
 
       - name: Run linters and type checks
-        set -x
         run: |
+          set -x
           poetry run black --check --exclude migrations/
           poetry run flake8 --exclude migrations,venv,__pycache__ .
           poetry run pylint flask_auth_mvp/
