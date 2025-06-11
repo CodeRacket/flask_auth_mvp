@@ -28,10 +28,11 @@ jobs:
       - name: Run linters and type checks
         run: |
           set -x
-          poetry run black --check --exclude migrations/
+          poetry run black --check --exclude '(migrations|venv|__pycache__)'
           poetry run flake8 --exclude migrations,venv,__pycache__ .
-          poetry run pylint flask_auth_mvp/
-          poetry run mypy . 
+          poetry run pylint --ignore=migrations,venv,__pycache__ flask_auth_mvp/
+          poetry run mypy .
 
       - name: Check import order using isort
-        run: poetry run isort --check-only .
+        run: poetry run isort --check-only --skip migrations --skip venv --skip __pycache__ .
+
