@@ -36,20 +36,12 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
 
-        existing_email = User.query.filter_by(
-            email=form.email.data
-            ).first()
-        existing_username = User.query.filter_by(
-            username=form.username.data
-            ).first()
+        existing_email = User.query.filter_by(email=form.email.data).first()
+        existing_username = User.query.filter_by(username=form.username.data).first()
 
         # Check if registration email and username already exists in DB
-        existing_email = User.query.filter_by(
-            email=form.email.data
-            ).first()
-        existing_username = User.query.filter_by(
-            username=form.username.data
-            ).first()
+        existing_email = User.query.filter_by(email=form.email.data).first()
+        existing_username = User.query.filter_by(username=form.username.data).first()
 
         # Check if registration email or username already exists in DB
         if existing_email:
@@ -64,9 +56,7 @@ def register():
             return render_template("register.html", form=form)
 
         # Create new user
-        user = User(
-            username=form.username.data, email=form.email.data
-            )
+        user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()

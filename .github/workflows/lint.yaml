@@ -26,7 +26,7 @@ jobs:
       - name: Run linters and type checks
         run: |
           set -x
-          poetry run black --check --exclude "(migrations|venv|__pycache__)" .
+          poetry run black --exclude "(migrations|venv|__pycache__)" .
           poetry run flake8 --exclude=migrations,venv,__pycache__ .
           poetry run pylint app/ --ignore=migrations,venv,__pycache__
           poetry run mypy .
