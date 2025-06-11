@@ -1,13 +1,15 @@
 #################
 # CodeRacket
 # File: models.py
-# Summary: models.py    Defines the User class with logic for checking the hashed password securely.
+# Summary: models.py    
+# Defines the User class with logic for 
+# checking the hashed password securely.
 ################
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 
-# werkzeug.security  Provides trusted hash functions that store and check passwords safely.
+# Provides trusted hash functions that store and check passwords safely.
 from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()

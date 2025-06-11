@@ -1,6 +1,6 @@
 # Python __init__ script used by run.py
-# Handles  App Creation, Importing User Database Schema, Secure handling of Session Key
-#
+# Handles  App Creation, Importing User Database Schema, 
+#Secure handling of Session Key
 from flask import Flask
 from flask_login import LoginManager
 from .models import db, User
@@ -34,8 +34,8 @@ def create_app():
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    # Register the Routes!
-    from app.routes import main as main_blueprint  # Required to Load @main.route
+    # Required to Load @main.route
+    from app.routes import main as main_blueprint  
 
     app.register_blueprint(main_blueprint)
 
