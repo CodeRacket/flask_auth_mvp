@@ -2,11 +2,9 @@ name: Linter and Typecheck
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   lint:
@@ -17,7 +15,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.11
+          python-version: "3.11"
 
       - name: Install Poetry
         run: curl -sSL https://install.python-poetry.org | python3 -
@@ -28,11 +26,11 @@ jobs:
       - name: Run linters and type checks
         run: |
           set -x
-          poetry run black --check --exclude '(migrations|venv|__pycache__)'
-          poetry run flake8 --exclude migrations,venv,__pycache__ .
-          poetry run pylint --ignore=migrations,venv,__pycache__ flask_auth_mvp/
+          poetry run black --check --exclude "(migrations|venv|__pycache__)" .
+          poetry run flake8 --exclude=migrations,venv,__pycache__ .
+          poetry run pylint app/ --ignore=migrations,venv,__pycache__
           poetry run mypy .
 
       - name: Check import order using isort
-        run: poetry run isort --check-only --skip migrations --skip venv --skip __pycache__ .
+        run: poetry run isort --check-only --skip=migrations --skip=venv --skip=__pycache__ .
 
