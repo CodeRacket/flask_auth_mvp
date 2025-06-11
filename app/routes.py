@@ -40,14 +40,14 @@ def register():
         existing_username = User.query.filter_by(username=form.username.data).first()
 
         # Check if registration email and username already exists in DB
-
         existing_email = User.query.filter_by(email=form.email.data).first()
         existing_username = User.query.filter_by(username=form.username.data).first()
 
         # Check if registration email or username already exists in DB
         if existing_email:
             flash(
-                "Email is already Registered, Please Log in or use a different email",
+                "Email is already Registered, \
+                 Please Log in or use a different email",
                 "danger",
             )
             return render_template("register.html", form=form)
