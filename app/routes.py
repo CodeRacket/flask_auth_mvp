@@ -1,10 +1,10 @@
 #######
 # Filename: routes.py
-# Summary: Retrieves form data, queries the user, 
+# Summary: Retrieves form data, queries the user,
 # and Executes/calls the user.check_password(...) function.
 #######
 
-# Flask and DB imports—for easy template 
+# Flask and DB imports—for easy template
 # handling for visitors and registered members.
 from flask import Blueprint, render_template, redirect, url_for
 from flask import request
@@ -34,21 +34,13 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
 
-        existing_email = User.query.filter_by(
-            email=form.email.data
-            ).first()
-        existing_username = User.query.filter_by(
-            username=form.username.data
-            ).first()
+        existing_email = User.query.filter_by(email=form.email.data).first()
+        existing_username = User.query.filter_by(username=form.username.data).first()
 
         # Check if registration email and username already exists in DB
 
-        existing_email = User.query.filter_by(
-            email=form.email.data
-            ).first()
-        existing_username = User.query.filter_by(
-            username=form.username.data
-            ).first()
+        existing_email = User.query.filter_by(email=form.email.data).first()
+        existing_username = User.query.filter_by(username=form.username.data).first()
 
         # Check if registration email or username already exists in DB
         if existing_email:
@@ -58,9 +50,7 @@ def register():
             )
             return render_template("register.html", form=form)
         if existing_username:
-            flash(
-                "Username is already taken. Please Choose a Different one.", "danger"
-                )
+            flash("Username is already taken. Please Choose a Different one.", "danger")
             return render_template("register.html", form=form)
 
         # Create new user
@@ -89,9 +79,7 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
-            flash(
-                f"Successfully Logged in as: {current_user.username} ", "success"
-                )
+            flash(f"Successfully Logged in as: {current_user.username} ", "success")
             return redirect(url_for("main.dashboard"))
         else:
             flash("Login Failed. Check email/password", "danger")
@@ -102,9 +90,7 @@ def login():
 @main.route("/dashboard")
 @login_required
 def dashboard():
-    print(
-        f"User Authenticated: {current_user.is_authenticated}, ID: {current_user.id}"
-        )
+    print(f"User Authenticated: {current_user.is_authenticated}, ID: {current_user.id}")
     return render_template("dashboard.html", name=current_user.username)
 
 

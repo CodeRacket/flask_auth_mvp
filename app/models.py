@@ -1,8 +1,8 @@
 #################
 # CodeRacket
 # File: models.py
-# Summary: models.py    
-# Defines the User class with logic for 
+# Summary: models.py
+# Defines the User class with logic for
 # checking the hashed password securely.
 ################
 
