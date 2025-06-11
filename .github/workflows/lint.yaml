@@ -27,10 +27,10 @@ jobs:
 
       - name: Run linters and type checks
         run: |
-          poetry run black --check .
-          poetry run flake8 .
+          poetry run black --check --exclude migrsations .
+          poetry run flake8 --exclude migrations,venv,__pycache__ .
           poetry run pylint flask_auth_mvp/
-          poetry run mypy .
+          poetry run mypy --exclude migrations .
 
       - name: Check import order using isort
         run: poetry run isort --check-only .
