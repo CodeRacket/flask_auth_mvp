@@ -103,3 +103,9 @@ def logout():
     logout_user()
     flash("You have been logged out.", "info")
     return redirect(url_for("main.login"))
+    
+    
+@main.route("/health")
+def health_check():
+    return "OK", 200
+
