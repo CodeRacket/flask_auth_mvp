@@ -5,6 +5,8 @@ from flask import Flask
 from flask_login import LoginManager
 from .models import db, User
 from dotenv import load_dotenv
+# import for pytest running custom commands
+from .custom_commands import register_commands
 
 # Added only for DB migration
 from flask_migrate import Migrate
@@ -28,6 +30,8 @@ def create_app():
     # Configure Login Behaviour
     login_manager.login_view = "main.login"
     login_manager.login_message_category = "info"
+
+    register_commands(app)
 
     # User Loaded Callback: Flask-Login needs this
     @login_manager.user_loader
