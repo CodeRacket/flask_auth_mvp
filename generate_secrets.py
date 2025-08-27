@@ -15,7 +15,6 @@ def generate_secret(length=50):
 
 
 def generate_env_secrets():
-
     # Setup PostgreSQL variables 
     postgres_user = "postgres"
     postgres_db = "db"
@@ -42,4 +41,3 @@ def generate_env_secrets():
 
 if __name__ == '__main__':
     generate_env_secrets()
-
