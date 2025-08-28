@@ -1,8 +1,11 @@
-# Python __init__ script used by run.py
-# Handles  App Creation, Importing User Database Schema,
-# Secure handling of Session Key
+
+
+# __init__.py — Application Factory
+# This script initalizes the Flask ap, database, login manager(session management), and CLI commands.
+# It also integrates FLask-Migrate for Alembic-based database migrations.
+
 from flask import Flask
-from flask_login import LoginManager
+from flask_login import LoginManager        # Authentication sessions
 from .models import db, User
 from dotenv import load_dotenv
 # import for pytest running custom commands
@@ -12,33 +15,35 @@ from .custom_commands import register_commands
 from flask_migrate import Migrate
 import os
 
-load_dotenv()
-login_manager = LoginManager()
+load_dotenv()   # Load environment variables from .env
+login_manager = LoginManager()      # Login configuration
 # Added only for DB migration
 migrate = Migrate()
 
-
+# Create Flask app instance
 def create_app():
     app = Flask(__name__)
+    # .env Configuration
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
-    # initialize extensions
-    db.init_app(app)
-    migrate.init_app(app, db)
-    login_manager.init_app(app)
+    # initialize Flask extensions with app
+    db.init_app(app)            # SQLAlchemy ORM
+    migrate.init_app(app, db)   # Alembic migration management  
+    login_manager.init_app(app) # Session and user authentication
 
-    # Configure Login Behaviour
-    login_manager.login_view = "main.login"
-    login_manager.login_message_category = "info"
+    # Configure Flask-Login Behaviour
+    login_manager.login_view = "main.login"     # Redirect to this route if user is not logged in 
+    login_manager.login_message_category = "info"   # Bootstrap flash message category
 
+    # Register custom CLI commands (e.g., for tests  or setup)
     register_commands(app)
 
-    # User Loaded Callback: Flask-Login needs this
+    # Flask-Login user loader: tells flask how to get a user object
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    # Required to Load @main.route
+    # Register Flask Blueprints for modular routing
     from app.routes import main as main_blueprint
 
     app.register_blueprint(main_blueprint)

@@ -47,3 +47,7 @@ requests = "*"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry.scripts]
+flask = "flask.cli:main"

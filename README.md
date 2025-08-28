@@ -1,48 +1,67 @@
 # Flask Auth MVP
 
-A secure and lightweight authentication system built with Python and Flask. Features include user registration, login/logout, and session management. Security is enforced through CSRF protection, secure password hashing, and route protection via Flask-Login.
+A secure and lightweight authentication system built with Python and Flask, containerized with Docker. Features include user registration, login/logout, and session management. Security is enforced through CSRF protection, secure password hashing, and route protection via Flask-Login. 
 
 ## Features
 
-- User Registration With Unique email and username validation.
+- User Registration with Unique email and username validation.
 - CSRF Protection using Flask-WTF
 - Secure password hashing using Werkzeug
 - Login and logout with session management via Flask-Login
 - Flash messages for user feedback (success/error)
 - Protected dashboard route requiring authentication 
 - Modular route structure using Flask Blueprints 
+- Docker: a cross-platform solution for developing and deploying applications
 
 ## Tech Stack
 
-- **Python 3.11.2+**
-- **Flask 3.1.1** – Web framework for routing and handling HTTP requests
-- **Flask-WTF 1.2.2** – Simplified form handling with CSRF protection
-- **Flask-Login 0.6.3** – Session management and authentication
-- **Werkzeug 3.1.3** – Secure password hashing
-- **SQLite 2.0.40** – Lightweight relational database
-- **Flask-SQLAlchemy 3.1.1** – ORM for database interaction
-- **Jinja2 3.1.6** – Templating engine for rendering HTML
+- **Language**: Python 3.11
+- **Framework**: Flask 3.1.1
+- **Auth**: Flask-Login, Flask-Bcrypt, bcrypt
+- **Forms & Validation**: Flask-WTF, WTForms, email-validator
+- **Secure Password Hashing**: werkzeug
+- **ORM**: SQLAlchemy, Flask-SQLAlchemy
+- **Migrations**: Flask-Migrate
+- **Database**: PostgreSQL (via psycopg2)
+- **Templating**: Jinja2
+- **Pythonic WSGI Server**: Gunicorn
+- **Environment Management**: python-dotenv
+- **Containerization**: Docker
+- **Web Server**: NginX
+
 
 ## Project Structure
+
 ```
-
-
-flask\_auth\_mvp/
+flask_auth_mvp/
 ├── app/
-│   ├── **init**.py          # App factory + extension initialization
-│   ├── models.py            # SQLAlchemy User model with password methods
-│   ├── routes.py            # All Flask routes using Blueprint
-│   ├── forms.py             # Registration and login forms
-│   └── templates/           # Jinja2 templates
+│   ├── __init__.py            # App factory and extension initialization
+│   ├── models.py              # SQLAlchemy models with auth methods
+│   ├── routes.py              # Flask blueprint routes
+│   ├── forms.py               # WTForms for login/registration
+│   ├── custom_commands.py     # Custom CLI commands (e.g. test runner)
+│   └── templates/             # Jinja2 HTML templates
 │       ├── base.html
-│       ├── home.html
-│       ├── login.html
-│       ├── register.html
-│       └── dashboard.html
-├── run.py                   # Entry point for the app
-├── requirements.txt
-├── .env                     # Environment variables (SECRET\_KEY)
-└── README.md
+│       └── ... (dashboard, login, register, etc.)
+├── tests/
+│   ├── conftest.py
+│   ├── test_auth.py
+│   └── ... (other unit tests)
+├── migrations/                # Alembic database migrations
+├── compose.yaml              # Docker Compose configuration
+├── Dockerfile                # Docker build instructions
+├── env_example               # Example .env file
+├── generate_secrets.py       # Script to generate .env secrets
+├── manage.py                 # DB initialization script
+├── run.py                    # Flask app entry point
+├── setup_docker.sh           # Setup helper script
+├── scan_secrets.sh           # Secret scanning script
+├── nginx.conf                # Nginx reverse proxy config
+├── pyproject.toml            # Poetry project file
+├── poetry.lock               # Locked dependency versions
+├── mypy.ini                  # Type checking config
+├── LICENSE                   # MIT License
+└── README.md                 # Project documentation
 ```
 
 ## Getting Started
@@ -54,47 +73,59 @@ git clone https://github.com/CodeRacket/flask_auth_mvp
 cd flask_auth_mvp
 ```
 
-### 2. Set Up a Virtual Environment
+### 2. Create .env environmental variables 
+```bash
+python3 generate_secrets.py
+```
+
+
+> Note: If using `.env` locally without Docker, ensure it's loaded before running `flask` or `python run.py` (use `python-dotenv` or `source .env`).
+
+> Do not commit .env to version control
+
+### 3.)Install Dependencies
+    *Consult the Docker documentation for installing docker on your machine*
+    **Security Precaution**: 
+    - After installing Docker, add your user to the docker group to avoid needing `sudo`.
+Example(Linux):
+```bash
+sudo usermod -aG docker $USER
+```
+>Then signout and back into your user account or restart the terminal to apply new permissions.
+
+### 4.)Run the app in Docker & initialize the database
+```bash
+docker compose up --build
+```
+
+### 5.)Initialize the Database(Flask-Migrate via Docker)
+Once your containers are running:
 
 ```bash
-python -m venv venv
-source venv/bin/activate      # Windows: venv\Scripts\activate
+docker compose exec web flask db init           # one time setup
+docker compose exec web flask db migrate -m "Initial schema"
+docker compose exec web flask db upgrade        # Applies changes to the actual DB
 ```
 
-### 3. Install dependencies:
-
+**Database Migrations Overview**
+- One-time setup(creates the migrations/ directory)
 ```bash
-pip install -r requirements.txt
+docker compose exec web flask db init   
 ```
 
-### 4. Set up environment variables:
-
-Create a `.env` file in the root directory and add:
-
-```
-SECRET_KEY=your-secret-key
-```
-> Do not commit `.env` to version control.
-
-### 5. Initialize the database(First Run):
-
-```bash #filename: init_db.py
-python
->>> from app import create_app
->>> from app.models import db
->>> app = create_app()
->>> with app.app_context():
-...     db.create_all()
-```
-
-6. Run the application:
-
+Create migration (after updating models)
 ```bash
-flask run
+docker compose exec web flask db migrate -m "Initial migration"
 ```
 
+Apply migration to the database:
+```bash
+docker compose exec web flask db upgrade
+```
+> Always Review auto-generated migration scripts in `migrations/versions/` before running `flask db upgrade`, especially if you are removing or renaming fields. 
 
-## Deployment
+
+## Deployment   
 
 To deploy this project, configure environment variables and use a platform like:
 
