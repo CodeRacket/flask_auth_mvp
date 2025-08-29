@@ -60,7 +60,7 @@ flask_auth_mvp/
 ├── pyproject.toml            # Poetry project file
 ├── poetry.lock               # Locked dependency versions
 ├── mypy.ini                  # Type checking config
-├── LICENSE                   # MIT License
+├── LICENSE                   # GNU-GPL License
 └── README.md                 # Project documentation
 ```
 
