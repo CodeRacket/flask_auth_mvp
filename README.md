@@ -138,12 +138,6 @@ To deploy this project, configure environment variables and use a platform like:
 * Fly.io
 * Railway
 
-## License
-
-This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
-
----
-
 ## Full License (GPL v3)
 
 The GNU General Public License (GPL) v3 applies to this project, and you are free to redistribute and modify the software under its terms. The full text of the license is available in the [LICENSE](LICENSE) file. Here is a brief summary:
