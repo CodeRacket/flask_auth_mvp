@@ -78,8 +78,7 @@ cd flask_auth_mvp
 python3 generate_secrets.py
 ```
 
-add the below lines to the .env file to extend environmental variables 
-to enable Flask migrations and set the developers environmental variable
+add the below lines to the .env file This uses environmental variables so the system can differentiate between development and production modes. 
 ```bash
 FLASK_APP=wsgi.py       # For integrating Flask migrations
 FLASK_ENV=development   # For setting developer mode or production
