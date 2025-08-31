@@ -9,6 +9,14 @@ env/
 ENV/
 .venv/
 
+# SSL / TLS certificate directory
+ssl/
+# Ignore a file named exactly ".pem" in the root directory
+/.pem
+
+# Ignore all files with the .pem extension anywhere in the repository
+*.pem
+
 # Flask-related
 instance/
 *.db

@@ -40,11 +40,13 @@ services:
 
   nginx:
     image: nginx:latest
-    container_name: nginx_proxy
+    container_name: nginx_proxy_tls
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/ssl/local:ro
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - web
 
