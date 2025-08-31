@@ -81,6 +81,7 @@ python3 generate_secrets.py
 add the below lines to the .env file This uses environmental variables so the system can differentiate between development and production modes. 
 ```bash
 FLASK_APP=wsgi.py       # For integrating Flask migrations
+# Developer mode is not full setup as of now. 
 FLASK_ENV=development   # For setting developer mode or production
 ```
 > Note: If using `.env` locally without Docker, ensure it's loaded before running `flask` or `python run.py` (use `python-dotenv` or `source .env`).
@@ -129,6 +130,22 @@ docker compose exec web flask db upgrade
 > Always Review auto-generated migration scripts in `migrations/versions/` before running `flask db upgrade`, especially if you are removing or renaming fields. 
 
 
+## Note: Due to recent updates this app now depends on at least developer certs for TLS. 
+
+### 1.) Install mkcert for your system
+
+### 2.) mkdir flask_auth_mvp/ssl && cd flask_auth/ssl
+
+### 3.) run the following commands to generate the certificate 
+```bash 
+mkcert -install # installs them on your system as trusted certificates
+mkcert localhost 127.0.0.1 ::1
+```
+**This generates 2 .pem files**
+*localhost+2.pem and locahost+2-key.pem*
+The configurations have already been added to nginx.conf and compose.yaml
+
+ 
 ## Deployment   
 
 To deploy this project, configure environment variables and use a platform like:
