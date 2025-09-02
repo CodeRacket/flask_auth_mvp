@@ -144,13 +144,13 @@ Run the below command to create `flask_auth_mvp/ssl` the `.pem files`.
 ```
 
 ### 3.) run the following commands to generate the TLS certificate's `.pem` files.
-The commands will install the developer certificates on your system as trusted certificates running on the loopback address of the system with hostname `localhost`, 127, and ipv6 loopback ::1. 
+The commands will install the developer certificates on your system as trusted certificates running on the loopback address of the system with hostname `localhost`, `127`, and `ipv6` loopback `::1`. 
 ```bash 
 mkcert -install # installs them on your system as trusted certificates
 mkcert localhost 127.0.0.1 ::1
 ```
 **This generates 2 .pem files**
-*localhost+2.pem and locahost+2-key.pem*
+*(localhost+2.pem) and (locahost+2-key.pem)*
 The configurations have already been added to nginx.conf and compose.yaml
 
  
@@ -159,7 +159,7 @@ The configurations have already been added to nginx.conf and compose.yaml
 To deploy this project, configure environment variables and use a platform like:
 
 * Render
-* Fly.io
+* Fly.io    # This hosting solution handles TLS for you
 * Railway
 
 ## Full License (GPL v3)
