@@ -132,11 +132,19 @@ docker compose exec web flask db upgrade
 
 ## Note: Due to recent updates this app now depends on at least developer certs for TLS. 
 
-### 1.) Install mkcert for your system
+### 1.) Install mkcert for your system (for Debian based systems)
+```bash
+apt install mkcert # Use certbot in production
+```
+### 2.)Create a directory for storing the TLS certificates in the root directory. 
+Run the below command to create `flask_auth_mvp/ssl` the `.pem files`.
+ 
+```bash
+ mkdir flask_auth_mvp/ssl && cd flask_auth/ssl
+```
 
-### 2.) mkdir flask_auth_mvp/ssl && cd flask_auth/ssl
-
-### 3.) run the following commands to generate the certificate 
+### 3.) run the following commands to generate the TLS certificate's `.pem` files.
+The commands will install the developer certificates on your system as trusted certificates running on the loopback address of the system with hostname `localhost`, 127, and ipv6 loopback ::1. 
 ```bash 
 mkcert -install # installs them on your system as trusted certificates
 mkcert localhost 127.0.0.1 ::1
