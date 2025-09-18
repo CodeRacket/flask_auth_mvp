@@ -6,13 +6,20 @@
 
 # Flask and DB imports—for easy template
 # handling for visitors and registered members.
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, jsonify
 
 # from flask import request
 from flask_login import login_user, current_user, logout_user, login_required
 from app.models import db, User
 from app.forms import RegistrationForm, LoginForm
-
+# User sanitization escape all user input little bobby 'drop tables.
+from markupsafe import escape
+from sqlalchemy.exc import IntegrityError   # avoid NameError
+import logging
+# import limiter from __init__.py 
+from app import limiter 
+# for production set basicConfig to level=logging.INFO
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
 # from flask import current_app as app
 
 # Create the Blueprint
@@ -27,55 +34,49 @@ def home():
 
 # Define Registration Route
 @main.route("/register", methods=["GET", "POST"])
+@limiter.limit("5 per minute")
 # registration function
 def register():
     # Only Allow Access to Dashboard by Authenticated Users
     if current_user.is_authenticated:
         return redirect(url_for("main.dashboard"))
-
     form = RegistrationForm()
     if form.validate_on_submit():
         # Check if registration email and username already exists in DB
-        existing_user = User.query.filter(
-                db.or_(User.email == form.email.data, User.username == form.username.data)
-                ).first()
-
-        if existing_user:
-            # Check if registration email or username already exists in DB
-            if existing_user.email == form.email.data:
-                flash(
-                    "Email is already Registered, \
-                     Please Log in or use a different email",
-                    "danger",
-                )
-            else:
-                flash("Username is already taken. Please choose another one.", "danger")
-            return render_template("register.html", form=form)
-
-        # Create new user
-        user = User(username=form.username.data, email=form.email.data) 
-        user.set_password(form.password.data))
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
         db.session.add(user)
         try:
             db.session.commit()
-            flash("Account created! You may now Login.", "success")
+            flash("Account created! You may now login.", "success")
             return redirect(url_for("main.login"))
-        except IntegrityError:
+        # Catches relational DB violations
+        except IntegrityError:  
             db.session.rollback()
-            flash("Registration failed. Please try again.", "danger")
+            flash("Email or username already exists. Please try again.", "danger")
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Registration failed. Please try again.", "danger")
+            #includes the stack trace in logs for better debugging.
+            logging.error(f"Registration error: {str(e)}", exc_info=True)
+        return render_template("register.html", form=form)
 
-    return render_template("register.html", form=form)
-
+    else:
+        if form.errors:
+            logging.debug(f"Form validation errors: {form.errors}")
+           
+        return render_template("register.html", form=form)
+ 
+# implement limiter for login protection
 
 # Define Login  Route
 @main.route("/login", methods=["GET", "POST"])
+@limiter.limit("5 per minute")
 def login():
     # check if user is authenticated
     if current_user.is_authenticated:
-
-        # remove these two print statements in production, Testing only
-        print(f"User Exists: {current_user}")
-        print(f"Authenticated: {current_user.is_authenticated}")
+        # proper way to handle debugging 
+        logging.debug(f"User exists: {current_user}")
         return redirect(url_for("main.dashboard"))
 
     # Initialize the LoginForm
@@ -84,7 +85,8 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
-            flash(f"Successfully Logged in as: {current_user.username} ", "success")
+            # XSS protection markupsafe escape
+            flash(f"Successfully Logged in as: {escape(current_user.username)}", "success")
             return redirect(url_for("main.dashboard"))
         else:
             flash("Login Failed. Check email/password", "danger")
@@ -95,8 +97,8 @@ def login():
 @main.route("/dashboard")
 @login_required
 def dashboard():
-    print(f"User Authenticated: {current_user.is_authenticated}, ID: {current_user.id}")
-    return render_template("dashboard.html", name=current_user.username)
+    logging.debug(f"User Authenticated: {current_user.is_authenticated}, ID: {current_user.id}")
+    return render_template("dashboard.html", name=escape(current_user.username))
 
 
 # Define Logout Route
@@ -110,5 +112,6 @@ def logout():
     
 @main.route("/health")
 def health_check():
-    return "OK", 200
+    # might have to update the string search for the health check unit test ...
+    return jsonify({"status":"OK"}), 200
 
