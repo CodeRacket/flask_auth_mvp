@@ -26,6 +26,12 @@ def create_app():
     # .env Configuration
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+            "pool_pre_ping": True   # Detects stale connections    
+            "pool_recycle": 3600    # Prevent connection timeouts
+    }
+
     # initialize Flask extensions with app
     db.init_app(app)            # SQLAlchemy ORM
     migrate.init_app(app, db)   # Alembic migration management  
