@@ -14,12 +14,13 @@ from .custom_commands import register_commands
 # Added only for DB migration
 from flask_migrate import Migrate
 import os
+from flask_limtier import Limiter
 
 load_dotenv()   # Load environment variables from .env
 login_manager = LoginManager()      # Login configuration
 # Added only for DB migration
 migrate = Migrate()
-
+limiter = Limiter(get_remote_address)
 # Create Flask app instance
 def create_app():
     app = Flask(__name__)
@@ -36,7 +37,10 @@ def create_app():
     db.init_app(app)            # SQLAlchemy ORM
     migrate.init_app(app, db)   # Alembic migration management  
     login_manager.init_app(app) # Session and user authentication
-
+    # security login limiter
+    limiter.init_app(app)
+    form app.routes import main
+    app.register_blueprint(main)
     # Configure Flask-Login Behaviour
     login_manager.login_view = "main.login"     # Redirect to this route if user is not logged in 
     login_manager.login_message_category = "info"   # Bootstrap flash message category
