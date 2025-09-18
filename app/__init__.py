@@ -47,7 +47,11 @@ def create_app():
     # Flask-Login user loader: tells flask how to get a user object
     @login_manager.user_loader
     def load_user(user_id):
-        return User.query.get(int(user_id))
+        try:
+            return User.query.get(int(user_id))
+        except(ValueError, TypeError):
+            return None # handle userid gracefully
+
 
     # Register Flask Blueprints for modular routing
     from app.routes import main as main_blueprint
