@@ -35,33 +35,34 @@ def register():
 
     form = RegistrationForm()
     if form.validate_on_submit():
-
-        existing_email = User.query.filter_by(email=form.email.data).first()
-        existing_username = User.query.filter_by(username=form.username.data).first()
-
         # Check if registration email and username already exists in DB
-        existing_email = User.query.filter_by(email=form.email.data).first()
-        existing_username = User.query.filter_by(username=form.username.data).first()
+        existing_user = User.query.filter(
+                db.or_(User.email == form.email.data, User.username == form.username.data)
+                ).first()
 
-        # Check if registration email or username already exists in DB
-        if existing_email:
-            flash(
-                "Email is already Registered, \
-                 Please Log in or use a different email",
-                "danger",
-            )
-            return render_template("register.html", form=form)
-        if existing_username:
-            flash("Username is already taken. Please Choose a Different one.", "danger")
+        if existing_user:
+            # Check if registration email or username already exists in DB
+            if existing_user.email == form.email.data:
+                flash(
+                    "Email is already Registered, \
+                     Please Log in or use a different email",
+                    "danger",
+                )
+            else:
+                flash("Username is already taken. Please choose another one.", "danger")
             return render_template("register.html", form=form)
 
         # Create new user
-        user = User(username=form.username.data, email=form.email.data)
-        user.set_password(form.password.data)
+        user = User(username=form.username.data, email=form.email.data) 
+        user.set_password(form.password.data))
         db.session.add(user)
-        db.session.commit()
-        flash("Account created! You may now Login.", "success")
-        return redirect(url_for("main.login"))
+        try:
+            db.session.commit()
+            flash("Account created! You may now Login.", "success")
+            return redirect(url_for("main.login"))
+        except IntegrityError:
+            db.session.rollback()
+            flash("Registration failed. Please try again.", "danger")
 
     return render_template("register.html", form=form)
 
@@ -71,6 +72,8 @@ def register():
 def login():
     # check if user is authenticated
     if current_user.is_authenticated:
+
+        # remove these two print statements in production, Testing only
         print(f"User Exists: {current_user}")
         print(f"Authenticated: {current_user.is_authenticated}")
         return redirect(url_for("main.dashboard"))
